@@ -27,10 +27,10 @@ class Reader
     def initialize(@env)
     end
 
-    def get
+    def get(with_auth : Bool)
     end
 
-    def get_immediately
+    def get_immediately(with_auth : Bool)
     end
 
     def out(prefix, suffix : String)

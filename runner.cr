@@ -57,14 +57,14 @@ class Runner
 
     def get_immediately(with_auth : Bool)
         @readers.each do |reader|
-            reader.get_immediately
+            reader.get_immediately with_auth
             sleep 1.seconds
         end
     end
 
     def get(with_auth : Bool)
         @readers.each do |reader|
-            reader.get
+            reader.get with_auth
             sleep 1.seconds
         end
     end

@@ -23,16 +23,16 @@ class Twitter::Reader < Reader
         return ""
     end
 
-    def get
+    def get(with_auth : Bool)
         expires_in = @env.expires_in
         manager = ExpirationManager.new @env.key, @env.path, expires_in
         if manager.is_expire
-            get_immediately
+            get_immediately with_auth
             manager.refresh Time.now
         end
     end
 
-    def get_immediately
+    def get_immediately(with_auth : Bool)
         client = Client.new File.join(@env.path, CLIENT_SECRET), screen_name
         begin
             resp = client.get
