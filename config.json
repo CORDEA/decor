@@ -1,0 +1,23 @@
+{
+    "order": [
+        {
+            "service": "gmail",
+            "key": "gmail",
+            "expires_in": 600,
+            "path": "/your/env/dir/gmail/"
+        },
+        {
+            "service": "twitter",
+            "key": "twitter",
+            "expires_in": 600,
+            "path": "/your/env/dir/twitter/"
+        },
+        {
+            "service": "twitter",
+            "key": "<unique key>",
+            "arg": "<Twitter screen name>",
+            "expires_in": 600,
+            "path": "/your/env/dir/twitter/"
+        }
+    ]
+}
