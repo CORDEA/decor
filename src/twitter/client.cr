@@ -43,19 +43,30 @@ class Twitter::User
     )
 end
 
+class Twitter::Search
+    JSON.mapping(
+        statuses: Array(Tweet)
+    )
+end
+
 class Twitter::Client
 
     API_HOST = "api.twitter.com"
     USER_TIMELINE_API_PATH = "/1.1/statuses/user_timeline.json?screen_name=%s"
     HOME_TIMELINE_API_PATH = "/1.1/statuses/home_timeline.json"
 
+    SEARCH_API_PATH = "/1.1/search/tweets.json?q=%s&locale=%s&lang=%s&count=%d"
+    SEARCH_LOCALE = "ja"
+    SEARCH_LANG = "ja"
+    SEARCH_COUNT = 10
+
     ACCESS_TOKEN_KEY = "twitter/access_token"
 
     getter client : HTTP::Client
     getter path : String
-    getter screen_name : String
+    getter query : String
 
-    def initialize(@path, @screen_name)
+    def initialize(@path, @query)
         @client = HTTP::Client.new(API_HOST, tls: true)
     end
 
@@ -73,13 +84,29 @@ class Twitter::Client
                            params.token_secret,
                            params.consumer_key,
                            params.consumer_secret)
-        if @screen_name.blank?
+        is_search = false
+        query = @query
+        if query.blank?
             response = @client.get HOME_TIMELINE_API_PATH
         else
-            response = @client.get USER_TIMELINE_API_PATH % [@screen_name]
+            qs = query.split ':'
+            case qs[0]
+            when "u"
+                response = @client.get USER_TIMELINE_API_PATH % [qs[1]]
+            when "s"
+                is_search = true
+                response = @client.get SEARCH_API_PATH % [qs[1], SEARCH_LOCALE, SEARCH_LANG, SEARCH_COUNT]
+            else
+                raise "Unsupported request type: %s" % [qs[0]]
+            end
         end
         if response.success? && response.body?
-            resp = Array(Tweet).from_json response.body
+            if is_search
+                result = Search.from_json response.body
+                resp = result.statuses
+            else
+                resp = Array(Tweet).from_json response.body
+            end
             @client.close
             return resp
         end

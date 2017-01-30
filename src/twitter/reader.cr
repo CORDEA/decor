@@ -16,7 +16,7 @@
 
 class Twitter::Reader < Reader
 
-    private def screen_name : String
+    private def query : String
         if arg = @env.arg
             return arg.as_s
         end
@@ -33,7 +33,7 @@ class Twitter::Reader < Reader
     end
 
     def get_immediately(with_auth : Bool)
-        client = Client.new File.join(@env.path, CLIENT_SECRET), screen_name
+        client = Client.new File.join(@env.path, CLIENT_SECRET), query
         begin
             resp = client.get
         rescue ex
