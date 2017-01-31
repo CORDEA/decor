@@ -48,7 +48,14 @@ To do the authentication, execute with the ```with-auth``` option.
         {
             "service": "twitter",
             "key": "<unique key>",
-            "arg": "<Twitter screen name>",
+            "arg": "u:<Twitter screen name>",
+            "expires_in": 600,
+            "path": "/your/env/dir/twitter/"
+        },
+        {
+            "service": "twitter",
+            "key": "<unique key>",
+            "arg": "s:<Search word of Twitter>",
             "expires_in": 600,
             "path": "/your/env/dir/twitter/"
         }
