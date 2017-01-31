@@ -41,7 +41,7 @@ class Twitter::Reader < Reader
         else
             contents = Array(String).new
             resp.each do |tweet|
-                contents << "%s - %s" % [tweet.text, tweet.user.name]
+                contents << "%s - %s" % [tweet.text.gsub(/\n/, ""), tweet.user.name]
             end
             File.write filepath, contents.join('\n')
         end
