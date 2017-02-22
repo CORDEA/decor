@@ -57,7 +57,10 @@ class Gmail::Client
     getter dirpath : String
 
     private def manager(token)
-        ExpirationManager.new ACCESS_TOKEN_KEY, @dirpath,Time::Span.new(0, 0, token.expires_in)
+        if expires_in = token.expires_in
+            return ExpirationManager.new ACCESS_TOKEN_KEY, @dirpath,Time::Span.new(0, 0, expires_in)
+        end
+        raise "Expires_in is nil."
     end
 
     def initialize(@dirpath, oauth2_params : OAuth2Params)
