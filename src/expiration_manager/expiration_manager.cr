@@ -25,7 +25,7 @@ class ExpirationManager
     end
 
     def refresh(now : Time)
-        @pref.put @key, now.epoch.to_s
+        @pref.put @key, now.to_unix.to_s
         @pref.commit
     end
 
@@ -34,7 +34,7 @@ class ExpirationManager
         if expire.nil?
             return true
         end
-        now = Time.new.epoch
+        now = Time.local.to_unix
         (expire.to_i64 + @period.seconds) < now
     end
 
